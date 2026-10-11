@@ -23,7 +23,7 @@
 import argparse
 import csv
 import sys
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import torch
@@ -118,7 +118,7 @@ def load_records(records_csv):
 
 
 def load_detection_counts(processing_csv):
-    """记录名 -> 检出事件数（同一记录多行取最大值）。"""
+    """记录名 -> {"detected": 检出事件数, "class_label": 类别}（同一记录多行取最大值）。"""
     detected = {}
     if not processing_csv.exists():
         return detected
@@ -126,7 +126,11 @@ def load_detection_counts(processing_csv):
         for row in csv.DictReader(handle):
             value = int(row["detected_events"] or 0)
             record = row["record"]
-            detected[record] = max(detected.get(record, 0), value)
+            previous = detected.get(record, {"detected": 0, "class_label": row["class_label"]})
+            detected[record] = {
+                "detected": max(previous["detected"], value),
+                "class_label": row["class_label"],
+            }
     return detected
 
 
@@ -173,34 +177,65 @@ def infer(model, transform, entries, device, batch_size):
     return results
 
 
-def summarize(results, records, detected, class_names):
-    """逐 (类别, SNR) 与总体汇总。"""
-    groups = defaultdict(list)
+def summarize(results, records, detection_info, class_names, only_observed=False):
+    """逐 (类别, SNR) 与总体汇总。
+
+    记录全集来自 records.csv（sweep）与处理清单（含 0001 等），即使某条记录
+    一张图都没切出来，也会计入分母（expected_events），不会被静默忽略；
+    检出数在清单缺失时按该记录实际导出的图片数回退，不会跨记录重复累计。
+    only_observed=True（--limit 调试）时只统计有结果的记录。
+    """
+    exported_by_record = Counter(result["record"] for result in results)
+    results_by_record = defaultdict(list)
     for result in results:
-        record_info = records.get(result["record"])
-        if record_info is not None:
-            snr = float(record_info["snr_db"])
-            dataset = "sweep"
-        else:
-            snr = None
-            dataset = "other"
-        groups[(result["class_label"], snr, dataset)].append(result)
+        results_by_record[result["record"]].append(result)
 
-    rows = []
+    def record_key(record, default_class=None):
+        if record in records:
+            info = records[record]
+            return (info["class_label"], float(info["snr_db"]), "sweep")
+        if record in detection_info:
+            return (detection_info[record]["class_label"], None, "other")
+        return (default_class, None, "other")
 
-    def make_row(label, snr, dataset, group):
-        records_in_group = sorted({result["record"] for result in group})
+    key_of = {}
+    for record in records:
+        key_of[record] = record_key(record)
+    for record in detection_info:
+        key_of.setdefault(record, record_key(record))
+    for result in results:
+        key_of.setdefault(
+            result["record"], record_key(result["record"], result["class_label"])
+        )
+    if only_observed:
+        key_of = {record: key for record, key in key_of.items() if record in results_by_record}
+
+    record_names_by_key = defaultdict(list)
+    for record, key in key_of.items():
+        if key[0] in class_names:
+            record_names_by_key[key].append(record)
+
+    def make_row(label, snr, dataset, record_names):
+        record_names = sorted(record_names)
+        group = [
+            result for name in record_names for result in results_by_record[name]
+        ]
         exported = len(group)
         correct = sum(
             1 for result in group if result["true_index"] == result["predicted_index"]
         )
-        expected = EXPECTED_EVENTS_PER_RECORD * len(records_in_group)
-        detected_total = sum(detected.get(record, exported) for record in records_in_group)
+        expected = EXPECTED_EVENTS_PER_RECORD * len(record_names)
+        detected_total = sum(
+            detection_info.get(name, {}).get(
+                "detected", exported_by_record.get(name, 0)
+            )
+            for name in record_names
+        )
         return {
             "class_label": label,
             "snr_db": "" if snr is None else snr,
             "dataset": dataset,
-            "records": len(records_in_group),
+            "records": len(record_names),
             "expected_events": expected,
             "detected_events": detected_total,
             "exported_images": exported,
@@ -209,23 +244,27 @@ def summarize(results, records, detected, class_names):
             "accuracy_end_to_end": round(correct / expected, 4) if expected else "",
         }
 
-    for (label, snr, dataset), group in sorted(
-        groups.items(), key=lambda item: (item[0][0], item[0][1] is None, item[0][1] or 0)
+    rows = []
+    for (label, snr, dataset), record_names in sorted(
+        record_names_by_key.items(),
+        key=lambda item: (item[0][0], item[0][1] is None, item[0][1] or 0),
     ):
-        rows.append(make_row(label, snr, dataset, group))
+        rows.append(make_row(label, snr, dataset, record_names))
 
     for label in sorted(class_names):
-        group = [r for r in results if r["class_label"] == label]
-        if group:
-            rows.append(make_row(label, None, "ALL", group))
-    all_group = list(results)
-    if all_group:
-        rows.append(make_row("ALL", None, "ALL", all_group))
-    sweep_group = [
-        r for r in results if records.get(r["record"]) is not None
+        record_names = [record for record, key in key_of.items() if key[0] == label]
+        if record_names:
+            rows.append(make_row(label, None, "ALL", record_names))
+    all_records = [record for record, key in key_of.items() if key[0] in class_names]
+    if all_records:
+        rows.append(make_row("ALL", None, "ALL", all_records))
+    sweep_records = [
+        record
+        for record, key in key_of.items()
+        if key[0] in class_names and key[2] == "sweep"
     ]
-    if sweep_group:
-        rows.append(make_row("ALL", None, "sweep", sweep_group))
+    if sweep_records:
+        rows.append(make_row("ALL", None, "sweep", sweep_records))
     return rows
 
 
@@ -292,7 +331,7 @@ def main(argv=None):
     print(f"设备：{device}")
 
     records = load_records(args.records_csv)
-    detected = load_detection_counts(args.processing_csv)
+    detection_info = load_detection_counts(args.processing_csv)
 
     entries = collect_images(args.images_root, class_to_idx, args.limit)
     if not entries:
@@ -300,7 +339,13 @@ def main(argv=None):
     print(f"图片总数：{len(entries)}（来源：{args.images_root}）")
     results = infer(model, transform, entries, device, args.batch_size)
 
-    rows = summarize(results, records, detected, class_names)
+    rows = summarize(
+        results,
+        records,
+        detection_info,
+        class_names,
+        only_observed=args.limit is not None,
+    )
     matrix = confusion_matrix(results, class_names)
 
     args.out_dir.mkdir(parents=True, exist_ok=True)
