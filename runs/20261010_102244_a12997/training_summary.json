@@ -1,0 +1,99 @@
+{
+  "run_name": "20261010_102244_a12997",
+  "model_name": "vit_small_patch16_dinov3.lvd1689m",
+  "seed": 42,
+  "epochs": 10,
+  "batch_size": 2,
+  "lr": 0.001,
+  "data_dir": "D:\\workspace\\preparation\\dinov3_11\\fsdataset",
+  "class_to_idx": {
+    "2FSK": 0,
+    "CW": 1,
+    "LFM": 2
+  },
+  "dataset_sizes": {
+    "train": 305,
+    "val": 108,
+    "test": 90
+  },
+  "baseline_val_acc": 18.51851851851852,
+  "best_epoch": 1,
+  "best_val_acc": 100.0,
+  "test_loss": 0.04248559371464782,
+  "test_acc": 100.0,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 0.42144039341050094,
+      "train_acc": 84.59016393442623,
+      "val_loss": 0.033959564183735184,
+      "val_acc": 100.0
+    },
+    {
+      "epoch": 2,
+      "train_loss": 0.025199594552491288,
+      "train_acc": 100.0,
+      "val_loss": 0.010673272443926652,
+      "val_acc": 100.0
+    },
+    {
+      "epoch": 3,
+      "train_loss": 0.008326512561599556,
+      "train_acc": 100.0,
+      "val_loss": 0.002960486574684856,
+      "val_acc": 100.0
+    },
+    {
+      "epoch": 4,
+      "train_loss": 0.0035289507268615006,
+      "train_acc": 100.0,
+      "val_loss": 0.0010677394470635423,
+      "val_acc": 100.0
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.0023898961335004566,
+      "train_acc": 100.0,
+      "val_loss": 0.000766475328149412,
+      "val_acc": 100.0
+    },
+    {
+      "epoch": 6,
+      "train_loss": 0.0016839640513949905,
+      "train_acc": 100.0,
+      "val_loss": 0.0006260107578849851,
+      "val_acc": 100.0
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.0011378019820111776,
+      "train_acc": 100.0,
+      "val_loss": 0.00037075539815608255,
+      "val_acc": 100.0
+    },
+    {
+      "epoch": 8,
+      "train_loss": 0.0007940545870176302,
+      "train_acc": 100.0,
+      "val_loss": 0.00041047717658565725,
+      "val_acc": 100.0
+    },
+    {
+      "epoch": 9,
+      "train_loss": 0.0006640824904084705,
+      "train_acc": 100.0,
+      "val_loss": 0.0001936605916246966,
+      "val_acc": 100.0
+    },
+    {
+      "epoch": 10,
+      "train_loss": 0.00044280233052005746,
+      "train_acc": 100.0,
+      "val_loss": 0.00018402099136370385,
+      "val_acc": 100.0
+    }
+  ],
+  "torch_version": "2.4.1+cu124",
+  "timm_version": "1.0.24",
+  "device": "cuda"
+}

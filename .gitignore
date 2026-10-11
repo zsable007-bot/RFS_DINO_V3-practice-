@@ -1,0 +1,12 @@
+# 大数据与可再生成产物（详见 README）
+data/
+output/
+fsdataset/
+hf-cache/
+mydataset/
+
+# Python / 编辑器
+__pycache__/
+.ipynb_checkpoints/
+.idea/
+*.pyc

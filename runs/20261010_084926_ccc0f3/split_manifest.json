@@ -1,0 +1,142 @@
+{
+  "seed": 42,
+  "mode": "image",
+  "ratios": {
+    "train": 0.6,
+    "val": 0.2,
+    "test": 0.2
+  },
+  "class_to_idx": {
+    "2FSK": 0,
+    "CW": 1,
+    "LFM": 2
+  },
+  "images": [
+    {
+      "class_label": "2FSK",
+      "split": "train",
+      "source_group_id": "2FSK:2FSK_0001",
+      "source_file": "D:\\workspace\\preparation\\dinov3_11\\output\\model_inputs\\2FSK\\2FSK_0001_event02_window01.png",
+      "output_file": "train/2FSK/2FSK_0001_event02_window01.png"
+    },
+    {
+      "class_label": "2FSK",
+      "split": "train",
+      "source_group_id": "2FSK:2FSK_0001",
+      "source_file": "D:\\workspace\\preparation\\dinov3_11\\output\\model_inputs\\2FSK\\2FSK_0001_event03_window01.png",
+      "output_file": "train/2FSK/2FSK_0001_event03_window01.png"
+    },
+    {
+      "class_label": "2FSK",
+      "split": "train",
+      "source_group_id": "2FSK:2FSK_0001",
+      "source_file": "D:\\workspace\\preparation\\dinov3_11\\output\\model_inputs\\2FSK\\2FSK_0001_event05_window01.png",
+      "output_file": "train/2FSK/2FSK_0001_event05_window01.png"
+    },
+    {
+      "class_label": "2FSK",
+      "split": "train",
+      "source_group_id": "2FSK:2FSK_0001",
+      "source_file": "D:\\workspace\\preparation\\dinov3_11\\output\\model_inputs\\2FSK\\2FSK_0001_event04_window01.png",
+      "output_file": "train/2FSK/2FSK_0001_event04_window01.png"
+    },
+    {
+      "class_label": "2FSK",
+      "split": "val",
+      "source_group_id": "2FSK:2FSK_0001",
+      "source_file": "D:\\workspace\\preparation\\dinov3_11\\output\\model_inputs\\2FSK\\2FSK_0001_event01_window01.png",
+      "output_file": "val/2FSK/2FSK_0001_event01_window01.png"
+    },
+    {
+      "class_label": "2FSK",
+      "split": "test",
+      "source_group_id": "2FSK:2FSK_0001",
+      "source_file": "D:\\workspace\\preparation\\dinov3_11\\output\\model_inputs\\2FSK\\2FSK_0001_event06_window01.png",
+      "output_file": "test/2FSK/2FSK_0001_event06_window01.png"
+    },
+    {
+      "class_label": "CW",
+      "split": "train",
+      "source_group_id": "CW:CW_0001",
+      "source_file": "D:\\workspace\\preparation\\dinov3_11\\output\\model_inputs\\CW\\CW_0001_event01_window01.png",
+      "output_file": "train/CW/CW_0001_event01_window01.png"
+    },
+    {
+      "class_label": "CW",
+      "split": "train",
+      "source_group_id": "CW:CW_0001",
+      "source_file": "D:\\workspace\\preparation\\dinov3_11\\output\\model_inputs\\CW\\CW_0001_event05_window01.png",
+      "output_file": "train/CW/CW_0001_event05_window01.png"
+    },
+    {
+      "class_label": "CW",
+      "split": "train",
+      "source_group_id": "CW:CW_0001",
+      "source_file": "D:\\workspace\\preparation\\dinov3_11\\output\\model_inputs\\CW\\CW_0001_event06_window01.png",
+      "output_file": "train/CW/CW_0001_event06_window01.png"
+    },
+    {
+      "class_label": "CW",
+      "split": "train",
+      "source_group_id": "CW:CW_0001",
+      "source_file": "D:\\workspace\\preparation\\dinov3_11\\output\\model_inputs\\CW\\CW_0001_event04_window01.png",
+      "output_file": "train/CW/CW_0001_event04_window01.png"
+    },
+    {
+      "class_label": "CW",
+      "split": "val",
+      "source_group_id": "CW:CW_0001",
+      "source_file": "D:\\workspace\\preparation\\dinov3_11\\output\\model_inputs\\CW\\CW_0001_event02_window01.png",
+      "output_file": "val/CW/CW_0001_event02_window01.png"
+    },
+    {
+      "class_label": "CW",
+      "split": "test",
+      "source_group_id": "CW:CW_0001",
+      "source_file": "D:\\workspace\\preparation\\dinov3_11\\output\\model_inputs\\CW\\CW_0001_event03_window01.png",
+      "output_file": "test/CW/CW_0001_event03_window01.png"
+    },
+    {
+      "class_label": "LFM",
+      "split": "train",
+      "source_group_id": "LFM:LFM_0001",
+      "source_file": "D:\\workspace\\preparation\\dinov3_11\\output\\model_inputs\\LFM\\LFM_0001_event02_window01.png",
+      "output_file": "train/LFM/LFM_0001_event02_window01.png"
+    },
+    {
+      "class_label": "LFM",
+      "split": "train",
+      "source_group_id": "LFM:LFM_0001",
+      "source_file": "D:\\workspace\\preparation\\dinov3_11\\output\\model_inputs\\LFM\\LFM_0001_event03_window01.png",
+      "output_file": "train/LFM/LFM_0001_event03_window01.png"
+    },
+    {
+      "class_label": "LFM",
+      "split": "train",
+      "source_group_id": "LFM:LFM_0001",
+      "source_file": "D:\\workspace\\preparation\\dinov3_11\\output\\model_inputs\\LFM\\LFM_0001_event01_window01.png",
+      "output_file": "train/LFM/LFM_0001_event01_window01.png"
+    },
+    {
+      "class_label": "LFM",
+      "split": "train",
+      "source_group_id": "LFM:LFM_0001",
+      "source_file": "D:\\workspace\\preparation\\dinov3_11\\output\\model_inputs\\LFM\\LFM_0001_event05_window01.png",
+      "output_file": "train/LFM/LFM_0001_event05_window01.png"
+    },
+    {
+      "class_label": "LFM",
+      "split": "val",
+      "source_group_id": "LFM:LFM_0001",
+      "source_file": "D:\\workspace\\preparation\\dinov3_11\\output\\model_inputs\\LFM\\LFM_0001_event06_window01.png",
+      "output_file": "val/LFM/LFM_0001_event06_window01.png"
+    },
+    {
+      "class_label": "LFM",
+      "split": "test",
+      "source_group_id": "LFM:LFM_0001",
+      "source_file": "D:\\workspace\\preparation\\dinov3_11\\output\\model_inputs\\LFM\\LFM_0001_event04_window01.png",
+      "output_file": "test/LFM/LFM_0001_event04_window01.png"
+    }
+  ]
+}
